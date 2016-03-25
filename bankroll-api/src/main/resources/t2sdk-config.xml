@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<t2sdk-configuration>
+	<performance   heartbeatTime="400"
+		           acquireConnWaitTime="3000"  registerTime="5" reconnInterval="3"
+		           localServerName="mctest"   callBackTime="5000" enmCompress="true" />
+    <parents>    
+		<parent  parentName="myserver" safeLevel="SSl">
+			<ssl protocol="SSL"   keyManageAlgorithm="SunX509"
+				 trustManageAlgorithm="SunX509" keyStoreType="jks"
+				 trustKeyStoreType="jks" keyCertFile="/data/bankroll-api/homs/apiclient.pfx"
+				 keyCertPwd="homs@123456"/>
+
+			<limit licenseFile="/data/bankroll-api/homs/license.dat" encrypt="HSBlowfish" />
+
+
+		 <!--
+		 	<limit licenseFile="/Users/krain/projects/java/homs/license.dat" encrypt="HSBlowfish" />
+			<limit licenseFile="/usr/share/apache-tomcat-8.0.9_3/webapps/bankroll-api/WEB-INF/classes/license.dat" encrypt="HSBlowfish" />
+		  -->
+			<members>
+
+				<member no="5" address="222.73.95.217" port="9011" poolSize="1" />
+				<!--
+				<member no="5" address="222.73.95.208" port="9003" poolSize="1" />
+				<member no="5" address="222.73.95.204" port="9003" poolSize="1" />
+				<member no="5" address="222.73.95.208" port="9005" poolSize="1" />
+				-->
+			</members>
+		</parent>
+	</parents>
+	<!--
+	<callBackMethods>
+		<method id="3" className="com.jres.test.CallBack" />
+	</callBackMethods>
+	-->
+	<logAdapter className="com.goldbao.homs.HomsLogAdapter" />
+</t2sdk-configuration>

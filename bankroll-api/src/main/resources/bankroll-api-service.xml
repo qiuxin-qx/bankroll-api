@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:spring-config.properties" file-encoding="utf-8"/>
+    <!--
+    1. datasource, transcation, hibernate integrate
+    2. import dao.xml
+    3. injection service implements class
+    -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan">
+            <list>
+                <value>com.goldbao.bankroll.model</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <!--<prop key="hibernate.show_sql">true</prop>-->
+            </props>
+        </property>
+    </bean>
+
+    <bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="register*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="generate*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="modify*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="login*" propagation="REQUIRED"/>
+            <tx:method name="*" propagation="NOT_SUPPORTED" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="txPointCut" expression="execution(* com.goldbao.bankroll.service..impl.*ServiceImpl.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>
+    </aop:config>
+
+    <!-- bankroll website api dao and service -->
+    <import resource="classpath:bankroll-api-dao.xml" />
+    <bean id="userService" class="com.goldbao.bankroll.service.user.impl.UserServiceImpl"/>
+
+    <bean id="organizeService" class="com.goldbao.bankroll.service.organize.impl.OrganizeServiceImpl"/>
+
+    <bean id="bankrollSolutionService" class="com.goldbao.bankroll.service.bankroll.impl.BankrollSolutionServiceImpl" />
+    <bean id="bankrollSolutionDayService" class="com.goldbao.bankroll.service.bankroll.impl.BankrollSolutionDayServiceImpl"/>
+    <bean id="bankrollService" class="com.goldbao.bankroll.service.bankroll.impl.BankrollServiceImpl"/>
+
+
+    <bean id="homsService" class="com.goldbao.bankroll.service.homs.impl.HomsServiceImpl"/>
+
+    <bean id="rechargeService" class="com.goldbao.bankroll.service.trade.impl.RechargeServiceImpl"/>
+    <bean id="tradeRecordService" class="com.goldbao.bankroll.service.trade.impl.TradeRecordServiceImpl"/>
+
+    <bean id="companyFundService" class="com.goldbao.bankroll.service.company.impl.CompanyFundServiceImpl"/>
+
+    <!-- bankroll manage api dao and service -->
+    <import resource="classpath:bankroll-api-manage-service.xml"/>
+
+</beans>

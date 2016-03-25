@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd" default-autowire="byName">
+
+	<bean id="sysUserDao" class="com.goldbao.bankroll.dao.manage.sysuser.impl.SysUserDaoHibernateImpl" />
+
+	<bean id="manageUserDao" class="com.goldbao.bankroll.dao.manage.user.impl.ManageUserDaoHibernateImpl"/>
+
+	<bean id="manageBankrollDao" class="com.goldbao.bankroll.dao.manage.bankroll.impl.ManageBankrollDaoHibernateImpl" />
+	<bean id="manageTradingDayDao" class="com.goldbao.bankroll.dao.manage.bankroll.impl.ManageTradingDaoHibernateImpl" />
+	<bean id="manageBankrollBillDao" class="com.goldbao.bankroll.dao.manage.bankroll.impl.ManageBankrollBillDaoHibernateImpl"/>
+	<bean id="manageBankrollHomsDao" class="com.goldbao.bankroll.dao.manage.bankroll.impl.ManageBankrollHomsDaoHibernateImpl"/>
+
+	<bean id="manageHomsDao" class="com.goldbao.bankroll.dao.manage.homs.impl.ManageHomsDaoHibernateImpl"/>
+
+    <bean id="manageTradeRecordDao" class="com.goldbao.bankroll.dao.manage.trade.impl.ManageTradeRecordDaoImpl" />
+</beans>

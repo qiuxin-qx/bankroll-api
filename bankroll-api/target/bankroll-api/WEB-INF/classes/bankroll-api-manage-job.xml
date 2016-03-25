@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	   default-autowire="byName">
+    <context:property-placeholder location="classpath:spring-config.properties" file-encoding="utf-8"/>
+	<bean id="homsSchedule" class="com.goldbao.bankroll.schedule.BankrollHomsSchedule">
+        <property name="operatorNo" value="${homs.operatorNo}"/>
+        <property name="operatorPwd" value="${homs.operatorPwd}" />
+    </bean>
+
+    <bean id="bankrollBillSchedule" class="com.goldbao.bankroll.schedule.BankrollBillSchedule" />
+
+    <bean id="paymentSchedule" class="com.goldbao.bankroll.schedule.PaymentSchedule"/>
+
+    <!-- 按天配置-收取服务费（还款） -->
+	<bean id="billSyncRepaymentByMonthJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="bankrollBillSchedule"/>
+        <property name="targetMethod" value="billRepaymentByMonth"/>
+    </bean>
+    <!-- 按月配置-收取服务费（还款） -->
+    <bean id="billSyncRepaymentByDayJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="bankrollBillSchedule"/>
+        <property name="targetMethod" value="billRepaymentByDay"/>
+    </bean>
+    <!-- homs数据同步 -->
+    <bean id="homsSyncScheduleJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="homsSchedule"/>
+		<property name="targetMethod" value="syncHomsJob"/>
+	</bean>
+
+    <!-- 支付状态同步 -->
+    <bean id="syncPaymentStatusScheduleJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="paymentSchedule"/>
+        <property name="targetMethod" value="syncPaymentStatus"/>
+    </bean>
+
+    <!-- 支付状态同步 -->
+    <bean id="syncSettlementScheduleJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="paymentSchedule"/>
+        <property name="targetMethod" value="syncSettlement"/>
+    </bean>
+
+	<bean id="homsSyncScheduleJobTriger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="homsSyncScheduleJob"/>
+		<property name="cronExpression" value="0 23 12 * * ?"></property>
+	</bean>
+
+    <bean id="billSyncRepaymentByMonthJobTriger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="billSyncRepaymentByMonthJob"/>
+        <property name="cronExpression" value="0 50 9 * * ?"></property>
+    </bean>
+
+    <bean id="billSyncRepaymentByDayJobTriger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="billSyncRepaymentByDayJob"/>
+        <property name="cronExpression" value="0 38 10 * * ?"></property>
+    </bean>
+
+    <bean id="syncPaymentStatusJobTriger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="syncPaymentStatusScheduleJob"/>
+        <property name="cronExpression" value="0 */1 * * * ?"></property>
+    </bean>
+
+    <bean id="syncSettlementJobTriger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="syncSettlementScheduleJob"/>
+        <property name="cronExpression" value="0 18 18 * * ?"></property>
+    </bean>
+
+	<bean lazy-init="false" autowire="no"
+		  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<array>
+                <ref bean="billSyncRepaymentByMonthJobTriger"/>
+                <ref bean="billSyncRepaymentByDayJobTriger"/>
+                <ref bean="syncPaymentStatusJobTriger"/>
+                <ref bean="syncSettlementJobTriger"/>
+
+                <!--
+				<ref bean="homsSyncScheduleJobTriger" />
+				-->
+			</array>
+		</property>
+	</bean>
+
+</beans>

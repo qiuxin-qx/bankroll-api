@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-autowire="byName">
+
+	<bean id="homsServer" class="com.goldbao.homs.HomsServerImpl" init-method="init" destroy-method="destory">
+		<property name="serverNode" value="myserver"/>
+	</bean>
+
+	<bean id="homsSend" class="com.goldbao.homs.HomsSendImpl"/>
+
+	<bean id="homsEvent" class="com.goldbao.homs.HomsEventImpl"/>
+</beans>

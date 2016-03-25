@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="com.goldbao.bankroll.controller" />
+	<context:component-scan base-package="com.goldbao.bankroll.manage.controller"/>
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" />
+
+    <mvc:interceptors>
+            <mvc:interceptor>
+                <mvc:mapping path="/*/*" />
+                <bean class="com.goldbao.bankroll.interceptor.ParameterValidateInterceptor"/>
+            </mvc:interceptor>
+	</mvc:interceptors>
+
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="defaultContentType" value="application/json" />
+		<property name="mediaTypes">
+			<props>
+				<prop key="json">application/json</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+
+	<context:property-placeholder location="classpath:spring-config.properties" file-encoding="utf-8"/>
+
+	<import resource="classpath:bankroll-api-manage-job.xml" />
+
+	<import resource="classpath:bankroll-api-sms.xml"/>
+	<import resource="classpath:bankroll-api-service.xml" />
+	<import resource="classpath:bankroll-api-pay.xml"/>
+	<import resource="classpath:bankroll-api-homs.xml" />
+</beans>

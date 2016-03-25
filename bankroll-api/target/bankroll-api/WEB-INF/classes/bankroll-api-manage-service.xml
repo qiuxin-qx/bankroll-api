@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- bankroll manage api dao and service -->
+    <import resource="classpath:bankroll-api-manage-dao.xml" />
+
+    <bean id="sysUserService" class="com.goldbao.bankroll.service.manage.sysuser.impl.SysUserServiceImpl" />
+
+    <bean id="manageUserService" class="com.goldbao.bankroll.service.manage.user.impl.ManageUserServiceImpl" />
+
+
+    <bean id="manageBankrollService" class="com.goldbao.bankroll.service.manage.bankroll.impl.ManageBankrollServiceImpl" />
+    <bean id="manageTradingDayService" class="com.goldbao.bankroll.service.manage.bankroll.impl.ManageTradingDayServiceImpl"/>
+
+
+    <bean id="manageHomsService" class="com.goldbao.bankroll.service.manage.homs.impl.ManageHomsServiceImpl" />
+
+    <bean id="manageTradeRecordService" class="com.goldbao.bankroll.service.manage.trade.impl.ManageTradeRecordServiceImpl" />
+</beans>

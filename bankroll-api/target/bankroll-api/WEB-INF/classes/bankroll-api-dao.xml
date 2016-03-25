@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd" default-autowire="byName">
+
+	<!-- user dao -->
+	<bean id="userDao" class="com.goldbao.bankroll.dao.user.impl.UserDaoHibernateImpl" />
+	<bean id="phoneValidateCodeDao" class="com.goldbao.bankroll.dao.user.impl.PhoneValidateCodeDaoHibernateImpl"/>
+	<bean id="userFundDao" class="com.goldbao.bankroll.dao.user.impl.UserFundDaoHibernateImpl" />
+	<bean id="userFundLogDao" class="com.goldbao.bankroll.dao.user.impl.UserFundLogDaoHibernateImpl" />
+
+	<!-- organize dao -->
+
+	<bean id="organizeDao" class="com.goldbao.bankroll.dao.organize.impl.OrganizeDaoHibernateImpl" />
+
+	<!-- bankroll dao -->
+
+	<bean id="bankrollSolutionDao" class="com.goldbao.bankroll.dao.bankroll.impl.BankrollSolutionDaoImpl"/>
+	<bean id="bankrollSolutionDayDao" class="com.goldbao.bankroll.dao.bankroll.impl.BankrollSolutionDayDaoImpl"/>
+	<bean id="bankrollDao" class="com.goldbao.bankroll.dao.bankroll.impl.BankrollDaoHibernateImpl"/>
+	<bean id="bankrollHomsDao" class="com.goldbao.bankroll.dao.bankroll.impl.BankrollHomsDaoHibernateImpl" />
+
+
+	<!-- homs dao -->
+	<bean id="homsDao" class="com.goldbao.bankroll.dao.homs.impl.HomsDaoHibernateImpl"/>
+
+	<!-- trade dao -->
+	<bean id="rechargeDao" class="com.goldbao.bankroll.dao.trade.impl.RechargeDaoHibernateImpl" />
+	<bean id="tradeRecordDao" class="com.goldbao.bankroll.dao.trade.impl.TradeRecordDaoHibernateImpl" />
+
+	<bean id="companyFundDao" class="com.goldbao.bankroll.dao.company.impl.CompanyFundDaoHibernateImpl" />
+</beans>
